@@ -1,0 +1,10 @@
+# Generated build and QA output
+/build/
+/test-artifacts/
+
+# Common local/editor files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+/.vs/
