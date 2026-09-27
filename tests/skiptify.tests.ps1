@@ -26,6 +26,21 @@ function Set-SpotifySnapshots {
     }
 }
 
+Describe "Spotify title classification" {
+    It "recognizes a track only when the dash has spaces on both sides" {
+        (Test-SpotifyTrackTitle -Title "505 - Arctic Monkeys") | Should Be $true
+        (Test-SpotifyTrackTitle -Title "ad-x") | Should Be $false
+        (Test-SpotifyTrackTitle -Title "ad- x") | Should Be $false
+        (Test-SpotifyTrackTitle -Title "ad -x") | Should Be $false
+    }
+
+    It "does not recognize blank and generic titles as tracks" {
+        (Test-SpotifyTrackTitle -Title "") | Should Be $false
+        (Test-SpotifyTrackTitle -Title $null) | Should Be $false
+        (Test-SpotifyTrackTitle -Title "Spotify") | Should Be $false
+    }
+}
+
 Describe "Skiptify recovery" {
     BeforeEach {
         $script:commands = @()

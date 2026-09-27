@@ -1068,6 +1068,12 @@ function Restart-SpotifySmooth {
     }
 }
 
+function Test-SpotifyTrackTitle {
+    param([AllowNull()][string]$Title)
+
+    return (-not [string]::IsNullOrEmpty($Title)) -and $Title.Contains(" - ")
+}
+
 function Invoke-Skiptify {
     $badCount = 0
     Write-SkiptifyLog "Skiptify started."
@@ -1113,9 +1119,9 @@ function Invoke-Skiptify {
             try {
                 $title = $spotify.MainWindowTitle
                 $isIgnored = $title -in $IgnoredTitles
-                $hasDash = $title -like "*-*"
+                $isTrackTitle = Test-SpotifyTrackTitle -Title $title
 
-                if ((-not [string]::IsNullOrEmpty($title)) -and (-not $hasDash) -and (-not $isIgnored)) {
+                if ((-not [string]::IsNullOrEmpty($title)) -and (-not $isTrackTitle) -and (-not $isIgnored)) {
                     $badCount++
 
                     if ($badCount -ge $TriggerCount) {
